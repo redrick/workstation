@@ -1,11 +1,8 @@
-FROM ubuntu:zesty
+FROM ubuntu:xenial
 
 MAINTAINER  Andrej Antas <andrej@antas.cz>
 
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
-
-ENV DEBIAN_FRONTEND noninteractive
-RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 # Set the locale
 RUN apt-get clean && apt-get update && apt-get install -y locales
@@ -76,6 +73,9 @@ RUN mv -f ~/selenium-server-standalone-$SELENIUM_STANDALONE_VERSION.jar /usr/loc
 RUN chown root:root /usr/local/bin/selenium-server-standalone.jar
 RUN chmod 0755 /usr/local/bin/selenium-server-standalone.jar
 
+RUN apt-get install -y zsh
+RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
+
 RUN apt-get autoremove -y
 
 RUN gem install bundler
@@ -84,4 +84,6 @@ ENV TINI_VERSION v0.16.1
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
 RUN chmod +x /tini
 
-CMD ["bash"]
+RUN rm /bin/sh && ln -s /bin/zsh /bin/sh
+
+CMD ["/bin/zsh"]
