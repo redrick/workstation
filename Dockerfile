@@ -52,7 +52,7 @@ RUN apt-get update
 RUN apt-get install -y ruby2.4 ruby2.4-dev
 
 # Chromedriver whole setup (TODO: get CHROME_DRIVER_VERSION from chromedriver.storage.googleapis.com/LATEST_RELEASE)
-ENV CHROME_DRIVER_VERSION=2.33
+ENV CHROME_DRIVER_VERSION=2.36
 ENV SELENIUM_STANDALONE_VERSION=3.4.0
 # TODO: get SELENIUM_STANDALONE_VERSION like so: $(echo "$SELENIUM_STANDALONE_VERSION" | cut -d"." -f-2)
 ENV SELENIUM_SUBDIR=3.4
