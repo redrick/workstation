@@ -27,7 +27,7 @@ RUN apt-get install -y build-essential
 RUN apt-get install -y wget links curl rsync bc git git-core apt-transport-https libxml2 libxml2-dev libcurl4-openssl-dev openssl
 RUN apt-get install -y gawk libreadline6-dev libyaml-dev autoconf libgdbm-dev libncurses5-dev automake libtool bison libffi-dev
 RUN apt-get install -y libpq-dev xvfb imagemagick libsasl2-dev wkhtmltopdf zip libgmp-dev
-RUN apt-get install -y openssh-client postgresql-client-10
+RUN apt-get install -y openssh-client postgresql-client-10 vim
 
 RUN apt-get install -y chromium-chromedriver
 
