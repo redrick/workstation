@@ -23,15 +23,19 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update
 
 ## Default Packages
-RUN apt-get install -y build-essential
+RUN apt-get install -y build-essential software-properties-common
 RUN apt-get install -y wget links curl rsync bc git git-core apt-transport-https libxml2 libxml2-dev libcurl4-openssl-dev openssl
 RUN apt-get install -y gawk libreadline6-dev libyaml-dev autoconf libgdbm-dev libncurses5-dev automake libtool bison libffi-dev
 RUN apt-get install -y libpq-dev xvfb imagemagick libsasl2-dev wkhtmltopdf zip libgmp-dev
-RUN apt-get install -y openssh-client postgresql-client-10 vim libsqlite3-dev vim
+RUN apt-get install -y openssh-client libsqlite3-dev vim htop
 
 RUN apt-get install -y chromium-chromedriver
 
-RUN apt-get install -y software-properties-common
+## Latest version of Postgres from their repos
+RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+RUN add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main"
+RUN apt-get update
+RUN apt-get -y install postgresql-client
 
 # Nodejs engine
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
@@ -43,10 +47,7 @@ RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources
 RUN apt-get update
 RUN apt-get install yarn
 
-# Ruby 2.4
-RUN apt-get install --reinstall ca-certificates
-RUN add-apt-repository ppa:brightbox/ruby-ng
-RUN apt-get update
+# Ruby 2.5
 RUN apt-get install -y ruby2.5 ruby2.5-dev
 
 # Chromedriver whole setup (TODO: get CHROME_DRIVER_VERSION from chromedriver.storage.googleapis.com/LATEST_RELEASE)
@@ -83,5 +84,10 @@ ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
 RUN chmod +x /tini
 
 RUN rm /bin/sh && ln -s /bin/zsh /bin/sh
+
+# And presist irb history please....
+RUN touch ~/.irbrc
+RUN echo "IRB.conf[:SAVE_HISTORY] = 200" >> ~/.irbrc
+RUN echo "IRB.conf[:HISTORY_FILE] = '~/.irb-history'" >> ~/.irbrc
 
 CMD ["/bin/zsh"]
