@@ -9,15 +9,17 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
 
 # Set the locale
-RUN apt-get clean && apt-get update && apt-get install -y locales
+RUN apt-get clean
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install -y locales apt-utils tzdata
 RUN locale-gen en_US.UTF-8
-RUN export LANGUAGE=en_US.UTF-8
-RUN export LANG=en_US.UTF-8
-RUN export LC_ALL=en_US.UTF-8
-RUN locale-gen en_US.UTF-8
-RUN dpkg-reconfigure locales
 
-ENV TZ=Europe/Prague
+RUN export LANG=en_US.UTF-8
+RUN export LANGUAGE=en_US.UTF-8
+RUN export LC_ALL=en_US.UTF-8
+RUN export TZ=Europe/Prague
+RUN dpkg-reconfigure locales
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update
@@ -76,6 +78,8 @@ RUN apt-get install -y zsh
 RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
 
 RUN apt-get autoremove -y
+RUN apt-get clean
+RUN rm -Rf /var/lib/apt/lists/*
 
 RUN gem install bundler
 
