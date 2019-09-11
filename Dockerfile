@@ -49,8 +49,10 @@ RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources
 RUN apt-get update
 RUN apt-get install yarn
 
-# Ruby 2.5
-RUN apt-get install -y ruby2.5 ruby2.5-dev
+# Ruby 2.6
+RUN apt-add-repository ppa:brightbox/ruby-ng
+RUN apt-get update
+RUN apt-get install -y ruby2.6 ruby2.6-dev
 
 # Chromedriver whole setup (TODO: get CHROME_DRIVER_VERSION from chromedriver.storage.googleapis.com/LATEST_RELEASE)
 ENV CHROME_DRIVER_VERSION=2.38
